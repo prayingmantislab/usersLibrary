@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import axios from 'axios';
-//import button from shadcdn
-import { button } from 'shadcdn';
 import { ProfileCard } from './components/ProfileCard';
 import { Button } from './components/Button';
 interface ApiResponse {
@@ -34,7 +32,7 @@ interface Picture {
   medium: string;
   thumbnail: string;
 }
-interface User {
+export interface User {
   name: Name;
   login: string;
   id: Id;
