@@ -2,62 +2,6 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import axios from 'axios';
 
-// {
-//   "gender": "male",
-//   "name": {
-//       "title": "Mr",
-//       "first": "Joris",
-//       "last": "Marchand"
-//   },
-//   "location": {
-//       "street": {
-//           "number": 6634,
-//           "name": "Rue Barrème"
-//       },
-//       "city": "Clermont-Ferrand",
-//       "state": "Cher",
-//       "country": "France",
-//       "postcode": 73223,
-//       "coordinates": {
-//           "latitude": "-17.3387",
-//           "longitude": "-26.0345"
-//       },
-//       "timezone": {
-//           "offset": "-10:00",
-//           "description": "Hawaii"
-//       }
-//   },
-//   "email": "joris.marchand@example.com",
-//   "login": {
-//       "uuid": "691a632b-e907-4791-9454-c09b831617b5",
-//       "username": "goldenfish802",
-//       "password": "disney1",
-//       "salt": "5LdCBKeZ",
-//       "md5": "766a7bad80b979430b100e3200bb15e7",
-//       "sha1": "47bca47205d6ebe67e50d336351f855dda7bfb70",
-//       "sha256": "bba449344adac0b24432ac51fd022a2e1098674ea4c647091a22a97243da92ca"
-//   },
-//   "dob": {
-//       "date": "1947-05-02T07:41:09.431Z",
-//       "age": 76
-//   },
-//   "registered": {
-//       "date": "2013-09-06T16:15:36.372Z",
-//       "age": 10
-//   },
-//   "phone": "03-20-41-47-34",
-//   "cell": "06-65-00-33-57",
-//   "id": {
-//       "name": "INSEE",
-//       "value": "1470438949344 75"
-//   },
-//   "picture": {
-//       "large": "https://randomuser.me/api/portraits/men/71.jpg",
-//       "medium": "https://randomuser.me/api/portraits/med/men/71.jpg",
-//       "thumbnail": "https://randomuser.me/api/portraits/thumb/men/71.jpg"
-//   },
-//   "nat": "FR"
-// }
 interface ApiResponse {
   results: User[];
 }
@@ -100,7 +44,21 @@ const gridStyle = {
   gridTemplateRows: 'repeat(4, 1fr)',
   gap: '1rem',
 };
-const Image = ({ imageUrl }: { imageUrl: string }) => (
+const ProfileCard = ({
+  imageUrl,
+  title,
+  firstName,
+  lastName,
+  id,
+  location,
+}: {
+  imageUrl: string;
+  title: string;
+  firstName: string;
+  lastName: string;
+  id: Id;
+  location: Location;
+}) => (
   <div style={{ position: 'relative', height: '350px', width: '350px' }}>
     <img
       src={imageUrl}
@@ -125,10 +83,25 @@ const Image = ({ imageUrl }: { imageUrl: string }) => (
         zIndex: 2,
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'end',
         color: 'white',
+        flexDirection: 'row',
+        padding: '20px',
+        boxSizing: 'border-box',
       }}
-    ></div>
+    >
+      <div className='flex-column'>
+        <h2 className='text-xl font-bold text-white'>
+          {title} {firstName} {lastName}
+        </h2>
+        <h3 style={{ color: '#bdb9b9' }}>ID: {id ? id.value : 'No ID'}</h3>
+        <h3 style={{ color: '#bdb9b9' }}>
+          {' '}
+          {location.street.number} {location.street.name} | {location.city} |{' '}
+          {location.country}
+        </h3>
+      </div>
+    </div>
   </div>
 );
 const Button = () => (
@@ -161,11 +134,17 @@ function App() {
     <div style={{ ...gridStyle, justifyContent: 'center' }}>
       {users.map((user: User, index: number) => (
         <div key={`${user.id.value}-${index}`}>
-          <Image imageUrl={user.picture.large} />
+          <div key={`${user.id.value}-${index}`}>
+            <ProfileCard
+              imageUrl={user.picture.large}
+              title={user.name.title}
+              firstName={user.name.first}
+              lastName={user.name.last}
+              id={user.id}
+              location={user.location}
+            />
+          </div>
           <Button />
-          <h1>{user.name.title}</h1>
-          {/* <h2>{user.name.first}</h2> */}
-          {/* <h6>{user.name.last}</h6> */}
         </div>
       ))}
     </div>
